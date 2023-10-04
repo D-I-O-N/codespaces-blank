@@ -1,0 +1,83 @@
+public partial class LoginPage : Page
+    {
+        Entities entities = new Entities();
+        public LoginPage()
+        {
+            InitializeComponent();
+            
+        }
+
+        public enum Roles
+        {
+            Организатор,
+            Участник,
+            Модератор,
+            Жюри,
+            Error
+        }
+
+
+        private void btAuth_Click(object sender, RoutedEventArgs e)
+        {
+            int login = int.Parse(tbLogin.Text.Trim());
+            string password = pbPassword.Password.Trim();
+
+            Auth(login, password);
+        }
+
+        public void Auth(int login, string password)
+        {
+            Users user = Authentication.UserCheck(login, password);
+            if (user != null)
+            {
+                // Заносим в приложение данные о пользователе
+                Application.Current.Properties["id_number"] = user.id_number;
+
+                FormsByRole(user);
+            }
+            else
+            {
+                MessageBox.Show("Возникла неизвестная ошибка. Попробуйте ещё раз!");
+            }
+        }
+
+        public void FormsByRole(Users user)
+        {
+            switch (GiveRoleUser(user))
+            {
+                case Roles.Организатор:
+                    NavigationService.Navigate(new ProfileOrganPage());
+                    break;
+                case Roles.Участник:
+                    NavigationService.Navigate(new ProfileOrganPage());
+                    break;
+                case Roles.Модератор:
+                    NavigationService.Navigate(new ProfileOrganPage());
+                    break;
+                case Roles.Жюри:
+                    NavigationService.Navigate(new ProfileOrganPage());
+                    break;
+                default:
+                    NavigationService.Navigate(new ProfileOrganPage());
+                    break;
+            }
+        }
+
+        private Roles GiveRoleUser(Users user)
+        {
+            // "string".ToString()[0] - 48 - берём первое число из нашей строки.
+            // Почему 48? Мы почему-то получаем 51 из "1", поэтому мы отнимаем на 48
+            switch (user.id_number.ToString()[0] - 48)
+            {
+                case 1:
+                    return Roles.Организатор;
+                case int i when i > 1 && i <= 7:
+                    return Roles.Участник;
+                case 8:
+                    return Roles.Модератор;
+                case 9:
+                    return Roles.Жюри;
+                default:
+                    return Roles.Error;
+            }
+        }

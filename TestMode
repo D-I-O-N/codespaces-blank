@@ -1,0 +1,59 @@
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using HackathonSkills.script;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using HackathonSkills.Database;
+
+namespace HackathonSkills.script.Tests
+{
+    [TestClass()]
+    public class AuthenticationTests
+    {
+
+        [TestMethod()]
+        public void UserCheckTest_True()
+        {
+            Entities entities = new Entities();
+            int login = 110001;
+            string password = "421743459\r\n";
+
+            Users excepted = entities.Users.FirstOrDefault(u => u.id_number == login && u.Password == password);
+
+            Users actual = Authentication.UserCheck(login, password);
+
+            Assert.AreEqual(excepted, actual);
+        }
+
+        [TestMethod()]
+        public void UserCheckTest_False()
+        {
+
+            Entities entities = new Entities();
+            int login = 110001;
+            string password = "421743459";
+
+            Users excepted = entities.Users.FirstOrDefault(u => u.id_number == login && u.Password == password);
+
+            Users actual = Authentication.UserCheck(login, password);
+
+            Assert.AreNotEqual(excepted, actual);
+        }
+
+        [TestMethod()]
+        public void UserCheckTest_Q()
+        {
+            Entities entities = new Entities();
+            int login = 110001;
+           
+            Users excepted = entities.Users.FirstOrDefault(u => u.id_number == login);
+
+            Users actual = Authentication.UserCheck(login);
+
+            Assert.AreNotEqual(excepted, actual);
+        }
+
+    }
+}

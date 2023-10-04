@@ -1,0 +1,39 @@
+using HackathonSkills.Database;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace HackathonSkills.script
+{
+        public class Authentication
+            {
+                        public Authentication() { }
+
+                                public static Users UserCheck(int login, string password = null)
+                                        {
+                                                        Entities entities = new Entities();
+
+                                                                    Users user = null;
+
+                                                                                // Проверка на наличие пароля. Может пригодится для "теста"
+                                                                                            if (password != null)
+                                                                                                        {
+                                                                                                                            user = entities.Users.FirstOrDefault(u => u.id_number == login && u.Password == password);
+                                                                                                        } else
+                                                                                                                    {
+                                                                                                                                        user = entities.Users.FirstOrDefault(u => u.id_number == login);
+                                                                                                                    }
+
+                                                                                                                                if (user != null) 
+                                                                                                                                                return user;
+                                                                                                                                                            return null;
+                                        }
+            }
+}
+                                                                                                                    }
+                                                                                                        }
+                                        }
+            }
+}
